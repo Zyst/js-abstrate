@@ -38,6 +38,8 @@ Interpret.body = (nodes: Array<AST.Any>, data: any, runtime: IGoInterpretRuntime
 
 // To interpret a list of nodes, interpret each node and return the list.
 Interpret.nodes = (nodes: Array<AST.Any>, data: any, runtime: IGoInterpretRuntime) => {
+  if (!Array.isArray(nodes)) console.log(JSON.stringify(nodes, null, 2))
+
   return nodes.map((node) => { return Interpret.node(node, data, runtime) })
 }
 

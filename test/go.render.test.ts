@@ -332,4 +332,97 @@ describe("Abstrate.go.render", () => {
     )
     assert.equal(result, "Hello, World!")
   })
-})
+
+  // Passes
+  it("Should render the first entry of an if correctly", () => {
+    const html = `
+{{ if eq $Variable "text" }}
+<span>Some text goes here</span>
+{{ else if eq $Variable "button" }}
+<button>Button</button>
+{{ else }}
+<h1>Header!</h1>
+{{ end }}`;
+
+    const result = Abstrate.go.render(
+      html,
+      {},
+      {
+        variables: {
+          Variable: "text"
+        }
+      }
+    );
+
+    assert.equal(result, "\n\n<span>Some text goes here</span>\n");
+  });
+
+  // Throws
+  it("Should render an else if block output as expected", () => {
+    const html = `
+{{ if eq $Variable "text" }}
+<span>Some text goes here</span>
+{{ else if eq $Variable "button" }}
+<button>Button</button>
+{{ else }}
+<h1>Header!</h1>
+{{ end }}`;
+
+    const result = Abstrate.go.render(
+      html,
+      {},
+      {
+        variables: {
+          Variable: "button"
+        }
+      }
+    );
+
+    assert.equal(result, "\n\n\n\n<button>Button</button>\n");
+  });
+
+  // Throws
+  it("Should render an else block output as expected", () => {
+    const html = `
+{{ if eq $Variable "text" }}
+<span>Some text goes here</span>
+{{ else if eq $Variable "button" }}
+<button>Button</button>
+{{ else }}
+<h1>Header!</h1>
+{{ end }}`;
+
+    const result = Abstrate.go.render(
+      html,
+      {},
+      {
+        variables: {
+          Variable: "anything-else"
+        }
+      }
+    );
+
+    assert.equal(result, "\n\n<h1>Header</h1>\n");
+  });
+
+  it("Throws an error on multiple if checks", () => {
+    const html = `
+{{ if eq $VariableType "text" }}
+<span>Some text goes here</span>
+{{ else if eq $VariableType "button" }}
+<button>Button</button>
+{{ else }}
+<h1>Header!</h1>
+{{ end }}`;
+
+    const result = Abstrate.go.render(
+      html,
+      {},
+      {
+        variables: { VariableType: "alese" },
+      }
+    )
+
+    assert.equal(result, "\n\n<span>Some text goes here</span>\n")
+  })
+});
